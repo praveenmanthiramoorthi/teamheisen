@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>See Complaints - Civic Engagement</title>
+  <style>
+    :root {
+      --green-700: #19744a;
+      --orange: #ff9800;
+      --bg: #f7f9fa;
+      --card-bg: #fff;
+      --text-color: #1a335e;
+      --muted-text: #5a7d6f;
+      --hover-bg: #e9f5ea;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 24px 16px;
+      min-height: 100vh;
+      color: var(--text-color);
+    }
+    h1 {
+      text-align: center;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+    .filter-container {
+      max-width: 480px;
+      margin: 0 auto 32px auto;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    select {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid var(--green-700);
+      background: #fff;
+      color: var(--text-color);
+      cursor: pointer;
+      flex: 1 1 180px;
+      min-width: 150px;
+    }
+    .complaints-list {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .complaint-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 3px 20px rgba(25,116,74,0.12);
+      padding: 20px 25px;
+      transition: background-color 0.3s ease;
+    }
+    .complaint-card:hover {
+      background-color: var(--hover-bg);
+    }
+    .complaint-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .username {
+      font-weight: 700;
+      color: var(--green-700);
+      font-size: 1.1rem;
+    }
+    .region {
+      font-size: 0.85rem;
+      color: var(--muted-text);
+      font-style: italic;
+    }
+    .complaint-text {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      white-space: pre-line;
+    }
+    .complaint-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.95rem;
+      color: var(--orange);
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+    .upvote-count {
+      font-weight: 700;
+      color: var(--green-700);
+      user-select: text;
+    }
+    .comments-section {
+      margin-top: 14px;
+      border-top: 1px solid #ddd;
+      padding-top: 12px;
+    }
+    .comment {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    .comment:last-child {
+      border-bottom: none;
+    }
+    .commenter {
+      font-weight: 700;
+      color: var(--green-600);
+      margin-right: 6px;
+    }
+    textarea.comment-input {
+      width: 100%;
+      border-radius: 8px;
+      border: 2px solid var(--green-700);
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      margin-top: 10px;
+      resize: vertical;
+      min-height: 50px;
+    }
+    button.submit-comment {
+      margin-top: 6px;
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    button.submit-comment:hover {
+      background: #e68900;
+    }
+  </style>
+</head>
+<body>
+  <h1>See Complaints</h1>
+
+  <div class="filter-container">
+    <select id="state-select" aria-label="Select state">
+      <option value="" disabled selected>Select State</option>
+      <option value="Karnataka">Karnataka</option>
+      <option value="Tamil Nadu">Tamil Nadu</option>
+      <option value="Maharashtra">Maharashtra</option>
+    </select>
+
+    <select id="district-select" aria-label="Select district" disabled>
+      <option value="" disabled selected>Select District</option>
+    </select>
+  </div>
+
+  <div class="complaints-list" id="complaints-list" aria-live="polite" aria-relevant="additions">
+    <!-- Complaints will be rendered here dynamically -->
+  </div>
+
+  <script>
+    const stateDistrictMap = {
+      "Karnataka": ["Bangalore Urban", "Mysore", "Udupi"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+      "Maharashtra": ["Mumbai", "Pune", "Nagpur"]
+    };
+
+    // Sample complaints data
+    const complaintsData = [
+      {
+        id: 1,
+        username: 'userA',
+        text: 'No street lighting in my area for 3 weeks.',
+        upvotes: 18,
+        state: 'Karnataka',
+        district: 'Bangalore Urban',
+        comments: [
+          { commenter: 'userB', text: 'I am facing the same issue!' },
+          { commenter: 'userC', text: 'Reported this too, hope it gets fixed soon.' }
+        ]
+      },
+      {
+        id: 2,
+        username: 'userX',
+        text: 'Garbage collection is irregular and causing bad odor.',
+        upvotes: 25,
+        state: 'Tamil Nadu',
+        district: 'Chennai',
+        comments: [
+          { commenter: 'userY', text: 'This is a big problem in my neighborhood.' }
+        ]
+      },
+      {
+        id: 3,
+        username: 'userM',
+        text: 'Potholes on main road causing accidents.',
+        upvotes: 30,
+        state: 'Maharashtra',
+        district: 'Mumbai',
+        comments: []
+      },
+      {
+        id: 4,
+        username: 'userW',
+        text: 'Park area not maintained properly, lots of trash.',
+        upvotes: 12,
+        state: 'Karnataka',
+        district: 'Mysore',
+        comments: [{ commenter: 'userZ', text: 'Totally agree!' }]
+      }
+    ];
+
+    const stateSelect = document.getElementById('state-select');
+    const districtSelect = document.getElementById('district-select');
+    const complaintsList = document.getElementById('complaints-list');
+
+    // Populate district options based on state selection
+    stateSelect.addEventListener('change', () => {
+      const selectedState = stateSelect.value;
+      const districts = stateDistrictMap[selectedState] || [];
+      districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+      if (districts.length > 0) {
+        districts.forEach(district => {
+          const option = document.createElement('option');
+          option.value = district;
+          option.textContent = district;
+          districtSelect.appendChild(option);
+        });
+        districtSelect.disabled = false;
+      } else {
+        districtSelect.disabled = true;
+        complaintsList.innerHTML = '<p>No complaints available for selected region.</p>';
+      }
+      complaintsList.innerHTML = '';
+    });
+
+    // Render complaints for selected district, sorted by upvotes descending
+    districtSelect.addEventListener('change', () => {
+      const selectedState = stateSelect.value;
+      const selectedDistrict = districtSelect.value;
+      if (!selectedState || !selectedDistrict) return;
+
+      const filteredComplaints = complaintsData
+        .filter(c => c.state === selectedState && c.district === selectedDistrict)
+        .sort((a, b) => b.upvotes - a.upvotes);
+
+      if (filteredComplaints.length === 0) {
+        complaintsList.innerHTML = '<p>No complaints posted in this district yet.</p>';
+        return;
+      }
+
+      complaintsList.innerHTML = '';
+      filteredComplaints.forEach(complaint => {
+        const card = document.createElement('article');
+        card.className = 'complaint-card';
+        card.setAttribute('data-id', complaint.id);
+
+        card.innerHTML = `
+          <div class="complaint-header">
+            <div class="username">@${complaint.username}</div>
+            <div class="region">${complaint.state} - ${complaint.district}</div>
+          </div>
+          <div class="complaint-text">${complaint.text}</div>
+          <div class="complaint-actions">
+            <div class="upvote-btn" data-id="${complaint.id}" role="button" aria-label="Upvote complaint" tabindex="0" style="user-select:none;">
+              ▲ Upvote <span class="upvote-count">${complaint.upvotes}</span>
+            </div>
+            <div class="toggle-comments-btn" data-id="${complaint.id}" role="button" tabindex="0" style="margin-left: 20px;">
+              💬 Comments (${complaint.comments.length})
+            </div>
+          </div>
+          <div class="comments-section" id="comments-${complaint.id}" style="display:none;">
+            ${complaint.comments.map(c => `<div class="comment"><span class="commenter">@${c.commenter}:</span> ${c.text}</div>`).join('')}
+            <textarea class="comment-input" placeholder="Add a comment..." aria-label="Add comment to complaint ${complaint.id}"></textarea>
+            <button class="submit-comment" data-id="${complaint.id}">Submit</button>
+          </div>
+        `;
+
+        complaintsList.appendChild(card);
+      });
+
+      addUpvoteListeners();
+      addCommentListeners();
+    });
+
+    function addUpvoteListeners() {
+      document.querySelectorAll('.upvote-btn').forEach(btn => {
+        btn.onclick = () => {
+          const id = parseInt(btn.getAttribute('data-id'));
+          const complaint = complaintsData.find(c => c.id === id);
+          if (!complaint) return;
+          complaint.upvotes++;
+          btn.querySelector('.upvote-count').textContent = complaint.upvotes;
+          sortAndRerender();
+        };
+        btn.onkeydown = (e) => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        };
+      });
+    }
+
+    function addCommentListeners() {
+      document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.getAttribute('data-id');
+          const commentsSection = document.getElementById(`comments-${id}`);
+          commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+        };
+        btn.onkeydown = (e) => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        };
+      });
+
+      document.querySelectorAll('.submit-comment').forEach(btn => {
+        btn.onclick = () => {
+          const id = parseInt(btn.getAttribute('data-id'));
+          const commentsSection = document.getElementById(`comments-${id}`);
+          const textarea = commentsSection.querySelector('.comment-input');
+          const commentText = textarea.value.trim();
+          if(!commentText) {
+            alert('Please enter a comment before submitting.');
+            return;
+          }
+          const complaint = complaintsData.find(c => c.id === id);
+          complaint.comments.push({ commenter: 'currentUser', text: commentText });
+          textarea.value = '';
+          renderComments(complaint);
+          updateCommentCount(complaint);
+        };
+      });
+    }
+
+    function renderComments(complaint) {
+      const commentsSection = document.getElementById(`comments-${complaint.id}`);
+      commentsSection.innerHTML = `
+        ${complaint.comments.map(c => `<div class="comment"><span class="commenter">@${c.commenter}:</span> ${c.text}</div>`).join('')}
+        <textarea class="comment-input" placeholder="Add a comment..." aria-label="Add comment to complaint ${complaint.id}"></textarea>
+        <button class="submit-comment" data-id="${complaint.id}">Submit</button>
+      `;
+      addCommentListeners();
+    }
+
+    function updateCommentCount(complaint) {
+      const card = complaintsList.querySelector(`.complaint-card[data-id="${complaint.id}"]`);
+      if(!card) return;
+      const toggleBtn = card.querySelector('.toggle-comments-btn');
+      toggleBtn.textContent = `💬 Comments (${complaint.comments.length})`;
+    }
+
+    function sortAndRerender() {
+      const selectedState = stateSelect.value;
+      const selectedDistrict = districtSelect.value;
+      if(selectedState && selectedDistrict) {
+        districtSelect.dispatchEvent(new Event('change'));
+      }
+    }
+  </script>
+</body>
+</html>

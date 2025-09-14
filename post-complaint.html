@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Complaint</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9800, #4caf50);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      width: 100%;
+      max-width: 500px;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #1b5e20;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1b5e20;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #388e3c;
+    }
+
+    /* Map placeholder */
+    #map {
+      width: 100%;
+      height: 250px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: 14px;
+    }
+
+    /* Anonymous toggle */
+    .toggle-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #ccc;
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-btn.active {
+      background: #ff9800;
+      color: #fff;
+    }
+
+    /* Image preview */
+    #preview {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Post a Complaint</h2>
+
+    <!-- Category -->
+    <label for="category">Complaint Category</label>
+    <select id="category">
+      <option>Garbage</option>
+      <option>Road Damage</option>
+      <option>Water Supply</option>
+      <option>Public Toilet</option>
+      <option>Other</option>
+    </select>
+     <!-- Date of Complaint -->
+    <label for="complaint-date">Date of Complaint</label>
+    <input type="date" id="complaint-date" name="complaint-date" />
+
+
+    <!-- Location -->
+    <label for="location">Location</label>
+    <input type="text" id="location" placeholder="Enter location manually">
+    <button type="button" onclick="useMyLocation()">📍 Use My Location</button>
+
+    <!-- Google Maps Placeholder -->
+    <div id="map">Google Map API placeholder (Pin location here)</div>
+
+    <!-- Description -->
+    <label for="description">Description</label>
+    <textarea id="description" placeholder="Describe the issue..."></textarea>
+
+    <!-- Upload Photo -->
+    <label for="photo">Upload Photo</label>
+    <input type="file" id="photo" accept="image/*" onchange="previewImage(event)">
+    <img id="preview" alt="Preview">
+
+    <!-- Anonymous Toggle -->
+    <button type="button" class="toggle-btn" id="anonBtn" onclick="toggleAnonymous()">Post Anonymous</button>
+
+    <!-- Submit -->
+    <button type="submit" onclick="submitComplaint()">Submit Complaint</button>
+  </div>
+
+  <script>
+    // Anonymous toggle
+    function toggleAnonymous() {
+      let btn = document.getElementById("anonBtn");
+      btn.classList.toggle("active");
+      if (btn.classList.contains("active")) {
+        btn.innerText = "Posting Anonymously ✅";
+      } else {
+        btn.innerText = "Post Anonymous";
+      }
+    }
+
+    // Preview uploaded image
+    function previewImage(event) {
+      let preview = document.getElementById("preview");
+      preview.src = URL.createObjectURL(event.target.files[0]);
+      preview.style.display = "block";
+    }
+
+    // Use My Location (mock)
+    function useMyLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          document.getElementById("location").value =
+            "Lat: " + pos.coords.latitude.toFixed(5) + 
+            ", Lng: " + pos.coords.longitude.toFixed(5);
+          alert("Location fetched ✅");
+        }, () => {
+          alert("Unable to fetch location ❌");
+        });
+      } else {
+        alert("Geolocation not supported");
+      }
+    }
+
+    // Submit (mock)
+    function submitComplaint() {
+      alert("Complaint Submitted ✅ (Demo only)");
+    }
+  </script>
+
+</body>
+</html>

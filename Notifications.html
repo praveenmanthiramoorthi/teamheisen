@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notifications - Civic Engagement</title>
+  <style>
+    :root {
+      --green-700: #19744a;
+      --green-600: #1a8357;
+      --orange: #ff9800;
+      --bg: #f7f9fa;
+      --muted-text: #6c7a85;
+      --card-bg: #ffffff;
+      --read-bg: #e7f7ec;
+      --unread-bg: #fff5e6;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--green-700);
+      padding: 24px 16px;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 24px;
+      font-size: 2rem;
+    }
+    .notification-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .notification {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgb(25 116 74 / 0.1);
+      padding: 18px 20px;
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      align-items: flex-start;
+      transition: background-color 0.3s ease;
+    }
+    .notification.unread {
+      background-color: var(--unread-bg);
+      font-weight: 600;
+    }
+    .notification.read {
+      background-color: var(--read-bg);
+      color: var(--muted-text);
+    }
+    .icon {
+      flex-shrink: 0;
+      font-size: 1.8rem;
+      padding: 8px;
+      border-radius: 50%;
+      background: var(--green-600);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .notification.unread .icon {
+      background: var(--orange);
+    }
+    .notification-content {
+      flex-grow: 1;
+    }
+    .notification-message {
+      font-size: 1rem;
+      margin: 0 0 6px 0;
+    }
+    .notification-time {
+      font-size: 0.85rem;
+      color: var(--muted-text);
+    }
+  </style>
+</head>
+<body>
+  <h1>Notifications</h1>
+  <section class="notification-list" role="list" aria-label="User notifications">
+    <article class="notification unread" role="listitem" tabindex="0">
+      <div class="icon" aria-hidden="true">⬆️</div>
+      <div class="notification-content">
+        <p class="notification-message">Your complaint "Pothole on 4th Street" got a new upvote.</p>
+        <time class="notification-time" datetime="2025-09-15T10:15:00+05:30">Today, 10:15 AM</time>
+      </div>
+    </article>
+    <article class="notification read" role="listitem">
+      <div class="icon" aria-hidden="true">✅</div>
+      <div class="notification-content">
+        <p class="notification-message">Your complaint "Broken streetlight near Main Park" has been marked as solved.</p>
+        <time class="notification-time" datetime="2025-09-13T18:45:00+05:30">Sep 13, 6:45 PM</time>
+      </div>
+    </article>
+    <article class="notification unread" role="listitem" tabindex="0">
+      <div class="icon" aria-hidden="true">💬</div>
+      <div class="notification-content">
+        <p class="notification-message">New comment on your complaint "Overflowing public bin at Central Plaza."</p>
+        <time class="notification-time" datetime="2025-09-15T09:50:00+05:30">Today, 9:50 AM</time>
+      </div>
+    </article>
+  </section>
+</body>
+</html>

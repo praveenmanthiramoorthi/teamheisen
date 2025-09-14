@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Profile - Civic Engagement</title>
+  <style>
+    :root {
+      --green-700: #19744a;
+      --green-600: #1a8357;
+      --orange: #ff9800;
+      --bg: #f7f9fa;
+      --input-bg: #fff;
+      --border-color: #c4d7c3;
+      --text-color: #14553a;
+      --text-muted: #5a7d6f;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--green-700);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+    form {
+      background: var(--input-bg);
+      border-radius: 16px;
+      box-shadow: 0 3px 20px rgba(25,116,74,0.1);
+      padding: 30px 28px;
+      max-width: 450px;
+      width: 100%;
+    }
+    h2 {
+      margin-top: 0;
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .profile-pic-container {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--green-600);
+      background: #ddd;
+      margin-bottom: 12px;
+    }
+    .upload-label {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .upload-label:hover {
+      background: #e68900;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    label, input, textarea {
+      display: block;
+      width: 100%;
+      margin-bottom: 18px;
+      font-size: 1rem;
+      color: var(--green-700);
+      font-weight: 600;
+    }
+    input[type="text"], input[type="email"], textarea {
+      padding: 10px 14px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-weight: 400;
+      font-family: inherit;
+      resize: vertical;
+      color: var(--green-700);
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+      border-color: var(--orange);
+      outline: none;
+    }
+    textarea {
+      min-height: 80px;
+    }
+    button {
+      background: var(--orange);
+      border: none;
+      padding: 14px 0;
+      width: 100%;
+      border-radius: 12px;
+      font-weight: 700;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #e68900;
+    }
+  </style>
+</head>
+<body>
+  <form id="profile-form" aria-label="User profile form">
+    <h2>Your Profile</h2>
+    <div class="profile-pic-container">
+      <img src="https://via.placeholder.com/120?text=User" alt="Profile Picture Preview" class="profile-pic" id="profile-pic-preview" />
+      <label for="profile-pic-upload" class="upload-label" tabindex="0">Choose Profile Picture</label>
+      <input type="file" id="profile-pic-upload" accept="image/*" />
+    </div>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" placeholder="Enter your username" required aria-required="true" />
+    <label for="fullname">Full Name</label>
+    <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" />
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="your.email@example.com" />
+    <label for="bio">Short Bio</label>
+    <textarea id="bio" name="bio" placeholder="Tell us a bit about yourself..."></textarea>
+    <button type="submit">Save Profile</button>
+  </form>
+
+  <script>
+    const picInput = document.getElementById('profile-pic-upload');
+    const picPreview = document.getElementById('profile-pic-preview');
+
+    picInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          picPreview.src = ev.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    const form = document.getElementById('profile-form');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Collect profile details
+      const profileData = {
+        username: form.username.value.trim(),
+        fullname: form.fullname.value.trim(),
+        email: form.email.value.trim(),
+        bio: form.bio.value.trim(),
+        // Image data could be handled here for upload
+      };
+      console.log('Profile saved:', profileData);
+      alert('Profile saved successfully!');
+      // Implement real backend API call as needed
+    });
+  </script>
+</body>
+</html>
