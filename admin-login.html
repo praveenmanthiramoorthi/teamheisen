@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Civic Issue Reporter - Admin Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #4caf50, #ff9800);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Transparent moving overlay */
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.15);
+      transform: rotate(25deg);
+      animation: moveOverlay 12s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes moveOverlay {
+      0%   { transform: translateX(-50%) rotate(25deg); }
+      100% { transform: translateX(0%) rotate(25deg); }
+    }
+
+    .login-container {
+      background: #fff;
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: #e65100;
+    }
+
+    .login-container input,
+    .login-container select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #1b5e20;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background: #388e3c;
+    }
+
+    .login-container a {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #1b5e20;
+      text-decoration: none;
+    }
+
+    .login-container a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Transparent moving overlay -->
+  <div class="background-overlay"></div>
+
+  <div class="login-container">
+    <h2>Admin Portal</h2>
+
+    <!-- Name -->
+    <input type="text" id="name" placeholder="Enter Full Name" required>
+
+    <!-- Work Email -->
+    <input type="email" id="work_email" placeholder="Enter Work Email" required>
+
+    <!-- Department Dropdown -->
+    <select id="department" required>
+      <option value="">-- Select Department --</option>
+      <option>Garbage</option>
+      <option>Road Damage</option>
+      <option>Water Supply</option>
+      <option>Public Toilet</option>
+    </select>
+
+    <!-- Mobile + OTP Section -->
+    <input type="tel" id="mobile" placeholder="Enter Mobile Number" maxlength="10" required>
+    <button id="getOtpBtn" onclick="getOTP()">Get OTP</button>
+
+    <div id="otpSection" class="hidden">
+      <input type="text" id="otp" placeholder="Enter OTP" maxlength="6">
+      <button onclick="login()">Login</button>
+      <a href="#" onclick="resendOTP()">Resend OTP</a>
+    </div>
+  </div>
+
+  <script>
+    // Example: Allowed admin email domain (later this can be validated via backend DB)
+    const allowedDomain = "@gov.in";
+
+    function getOTP() {
+      const email = document.getElementById("work_email").value.trim();
+      const mobile = document.getElementById("mobile").value;
+
+      if (!email.endsWith(allowedDomain)) {
+        alert("❌ This email is not registered as an admin.");
+        return;
+      }
+
+      if (mobile.length !== 10) {
+        alert("❌ Please enter a valid 10-digit mobile number.");
+        return;
+      }
+
+      // Hide Get OTP button, show OTP input
+      document.getElementById("getOtpBtn").classList.add("hidden");
+      document.getElementById("otpSection").classList.remove("hidden");
+
+      alert("OTP sent to +91 " + mobile + " ✅ (demo only).");
+    }
+
+    function login() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("work_email").value.trim();
+      const dept = document.getElementById("department").value;
+      const otp = document.getElementById("otp").value;
+
+      if (!name || !email || !dept) {
+        alert("❌ Please fill all fields before login.");
+        return;
+      }
+
+      if (!email.endsWith(allowedDomain)) {
+        alert("❌ This email is not registered as an admin.");
+        return;
+      }
+
+      if (otp.length === 6) {
+        alert("✅ Admin Login Successful (Demo only)");
+      } else {
+        alert("❌ Invalid OTP");
+      }
+    }
+
+    function resendOTP() {
+      alert("New OTP sent ✅ (demo only).");
+    }
+  </script>
+</body>
+</html>

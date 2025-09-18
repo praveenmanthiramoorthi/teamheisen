@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Complaint Resolution Stats</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f7f9fa;
+      margin: 0;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #19744a;
+    }
+    h1 {
+      color: #ff9800;
+      margin-bottom: 40px;
+      font-weight: 700;
+      font-size: 2.4rem;
+      text-align: center;
+    }
+    .charts-container {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 50px;
+      align-items: start;
+    }
+    .chart-box {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 3px 20px rgb(25 116 74 / 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .chart-box canvas {
+      max-width: 100%;
+    }
+    .chart-title {
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+      color: #1a8357;
+      text-align: center;
+    }
+    @media (max-width: 720px) {
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Complaint Resolution Statistics</h1>
+  <div class="charts-container">
+    <!-- Line Chart -->
+    <div class="chart-box">
+      <div class="chart-title">Resolved Complaints Over Time</div>
+      <canvas id="lineChart"></canvas>
+    </div>
+    <!-- Pie Chart -->
+    <div class="chart-box">
+      <div class="chart-title">Solved vs Pending Complaints</div>
+      <canvas id="pieChart"></canvas>
+    </div>
+    <!-- Bar Chart -->
+    <div class="chart-box" style="grid-column: span 2;">
+      <div class="chart-title">Complaints by Category (Solved)</div>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+<script>
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+const barCtx = document.getElementById('barChart').getContext('2d');
+
+const lineChart = new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    datasets: [{
+      label: 'Resolved Complaints',
+      data: [12, 19, 15, 22, 30, 35, 42, 48, 50],
+      borderColor: '#4caf50',
+      backgroundColor: 'rgba(76,175,80,0.2)',
+      borderWidth: 3,
+      fill: true,
+      tension: 0.4,
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  },
+  options: {
+    animation: {
+      duration: 2000,
+      easing: 'easeOutQuart'
+    },
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { color: '#19744a' }
+      },
+      x: {
+        ticks: { color: '#19744a' }
+      }
+    },
+    plugins: {
+      legend: { display: true, labels: { color: '#19744a' } }
+    }
+  }
+});
+
+const pieChart = new Chart(pieCtx, {
+  type: 'pie',
+  data: {
+    labels: ['Solved', 'Pending'],
+    datasets: [{
+      data: [65, 35],
+      backgroundColor: ['#4caf50', '#ff9800'],
+      hoverOffset: 30,
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    animation: {
+      animateRotate: true,
+      duration: 1500,
+      easing: 'easeOutBounce'
+    },
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+    }
+  }
+});
+
+const barChart = new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Roads', 'Sanitation', 'Streetlights', 'Water', 'Others'],
+    datasets: [
+      {
+        label: 'Solved Complaints',
+        data: [45, 38, 30, 22, 15],
+        backgroundColor: '#4caf50'
+      },
+      {
+        label: 'Pending Complaints',
+        data: [15, 22, 25, 10, 8],
+        backgroundColor: '#ff9800'
+      }
+    ]
+  },
+  options: {
+    animation: {
+      duration: 1800,
+      easing: 'easeOutQuart'
+    },
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { color: '#19744a' }
+      },
+      x: {
+        ticks: { color: '#19744a' }
+      }
+    },
+    plugins: {
+      legend: { position: 'top', labels: { color: '#19744a' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
