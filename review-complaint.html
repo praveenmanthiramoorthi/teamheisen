@@ -292,24 +292,33 @@
       addCommentListeners();
     });
 
-    function addUpvoteListeners() {
-      document.querySelectorAll('.upvote-btn').forEach(btn => {
-        btn.onclick = () => {
-          const id = parseInt(btn.getAttribute('data-id'));
-          const complaint = complaintsData.find(c => c.id === id);
-          if (!complaint) return;
-          complaint.upvotes++;
-          btn.querySelector('.upvote-count').textContent = complaint.upvotes;
-          sortAndRerender();
-        };
-        btn.onkeydown = (e) => {
-          if(e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            btn.click();
-          }
-        };
-      });
-    }
+    // Track which complaints current user has upvoted
+const userUpvotes = new Set();
+
+function addUpvoteListeners() {
+  document.querySelectorAll('.upvote-btn').forEach(btn => {
+    btn.onclick = () => {
+      const id = parseInt(btn.getAttribute('data-id'));
+      if (userUpvotes.has(id)) {
+        alert("You have already upvoted this complaint.");
+        return;
+      }
+      const complaint = complaintsData.find(c => c.id === id);
+      if (!complaint) return;
+      complaint.upvotes++;
+      userUpvotes.add(id); // mark as upvoted
+      btn.querySelector('.upvote-count').textContent = complaint.upvotes;
+      sortAndRerender();
+    };
+    btn.onkeydown = (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
+      }
+    };
+  });
+}
+
 
     function addCommentListeners() {
       document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
