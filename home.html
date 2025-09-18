@@ -240,10 +240,43 @@
   display: flex;
 }
 
+/* 🔥 Moving transparent overlay */
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(25deg);
+  animation: moveOverlay 12s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes moveOverlay {
+  0%   { transform: translateX(-80%) rotate(25deg); }
+  100% { transform: translateX(80%) rotate(25deg); }
+}
+
+/* Make sure your actual content stays above overlay */
+header, .cards-container, .bottom-nav {
+  position: relative;
+  z-index: 1;
+}
+.bottom-nav{
+  position: fixed;
+  z-index: 1;
+}
+
   </style>
 </head>
 <body>
+ 
+
   <header>
+     <!-- 🔥 Moving background overlay -->
+<div class="background-overlay"></div>
     <div class="welcome-container">
       <h1>Welcome To Civic Reporting System</h1>
       <p>Report, rate, and improve civic services with ease</p>
@@ -272,7 +305,7 @@
       <p>Help us improve</p>
     </a>
   </section>
-  <nav class="bottom-nav" role="navigation" aria-label="Bottom navigation">
+  <nav class="bottom-nav"  aria-label="Bottom navigation">
     <a href="index.html" class="nav-item active" aria-label="Home">
       <div class="nav-icon">🏠</div>
       Home
@@ -284,6 +317,7 @@
    <div 
   class="nav-item add" 
   id="addMenuBtn" 
+  role="button"
   tabindex="0" 
   aria-haspopup="true" 
   aria-expanded="false" 
@@ -292,7 +326,6 @@
   <div class="nav-icon">➕</div>
 </div>
 
-</div>
 
     <a href="Notifications.html" class="nav-item" aria-label="Notifications">
       <div class="nav-icon">🔔</div>
