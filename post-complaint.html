@@ -5,15 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post a Complaint</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ff9800, #4caf50);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
       padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Transparent moving overlay */
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.15);
+      transform: rotate(25deg);
+      animation: moveOverlay 10s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes moveOverlay {
+      0%   { transform: translateX(-50%) rotate(25deg); }
+      100% { transform: translateX(0%) rotate(25deg); }
     }
 
     .form-container {
@@ -23,6 +44,9 @@
       padding: 25px;
       border-radius: 15px;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1;
+      margin: 0 auto 40px auto;
     }
 
     h2 {
@@ -44,7 +68,7 @@
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       outline: none;
     }
 
@@ -76,7 +100,7 @@
       height: 250px;
       background: #e0e0e0;
       border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -84,14 +108,14 @@
       font-size: 14px;
     }
 
-    /* Anonymous toggle */
+    /* Anonymous button */
     .toggle-btn {
       width: 100%;
       padding: 12px;
       border-radius: 10px;
       border: none;
-      background: #ccc;
-      color: #000;
+      background: #1b5e20;
+      color: #fff;
       font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
@@ -100,6 +124,7 @@
     .toggle-btn.active {
       background: #ff9800;
       color: #fff;
+      cursor: not-allowed; /* lock button */
     }
 
     /* Image preview */
@@ -113,26 +138,30 @@
 </head>
 <body>
 
+  <!-- Moving transparent overlay -->
+  <div class="background-overlay"></div>
+
   <div class="form-container">
     <h2>Post a Complaint</h2>
 
     <!-- Category -->
     <label for="category">Complaint Category</label>
-    <select id="category">
+    <select id="category" required>
+      <option value="">-- Select a category --</option>
       <option>Garbage</option>
       <option>Road Damage</option>
       <option>Water Supply</option>
       <option>Public Toilet</option>
       <option>Other</option>
     </select>
-     <!-- Date of Complaint -->
-    <label for="complaint-date">Date of Complaint</label>
-    <input type="date" id="complaint-date" name="complaint-date" />
 
+    <!-- Date -->
+    <label for="complaint-date">Date of Complaint</label>
+    <input type="date" id="complaint-date" name="complaint-date" required>
 
     <!-- Location -->
     <label for="location">Location</label>
-    <input type="text" id="location" placeholder="Enter location manually">
+    <input type="text" id="location" placeholder="Enter location manually" required>
     <button type="button" onclick="useMyLocation()">📍 Use My Location</button>
 
     <!-- Google Maps Placeholder -->
@@ -140,14 +169,14 @@
 
     <!-- Description -->
     <label for="description">Description</label>
-    <textarea id="description" placeholder="Describe the issue..."></textarea>
+    <textarea id="description" placeholder="Describe the issue..." required></textarea>
 
     <!-- Upload Photo -->
     <label for="photo">Upload Photo</label>
-    <input type="file" id="photo" accept="image/*" onchange="previewImage(event)">
+    <input type="file" id="photo" accept="image/*" onchange="previewImage(event)" required>
     <img id="preview" alt="Preview">
 
-    <!-- Anonymous Toggle -->
+    <!-- Anonymous Button -->
     <button type="button" class="toggle-btn" id="anonBtn" onclick="toggleAnonymous()">Post Anonymous</button>
 
     <!-- Submit -->
@@ -155,14 +184,16 @@
   </div>
 
   <script>
-    // Anonymous toggle
+    let isAnonymous = false;
+
+    // Anonymous toggle (one-time action)
     function toggleAnonymous() {
       let btn = document.getElementById("anonBtn");
-      btn.classList.toggle("active");
-      if (btn.classList.contains("active")) {
+      if (!isAnonymous) {
+        btn.classList.add("active");
         btn.innerText = "Posting Anonymously ✅";
-      } else {
-        btn.innerText = "Post Anonymous";
+        isAnonymous = true;
+        alert("You are posting anonymously.");
       }
     }
 
@@ -178,7 +209,7 @@
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
           document.getElementById("location").value =
-            "Lat: " + pos.coords.latitude.toFixed(5) + 
+            "Lat: " + pos.coords.latitude.toFixed(5) +
             ", Lng: " + pos.coords.longitude.toFixed(5);
           alert("Location fetched ✅");
         }, () => {
@@ -189,9 +220,24 @@
       }
     }
 
-    // Submit (mock)
+    // Validate + Submit (mock)
     function submitComplaint() {
-      alert("Complaint Submitted ✅ (Demo only)");
+      const category = document.getElementById("category").value;
+      const date = document.getElementById("complaint-date").value;
+      const location = document.getElementById("location").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const photo = document.getElementById("photo").files.length;
+
+      if (!category || !date || !location || !description || photo === 0) {
+        alert("❌ Please fill in all fields before submitting.");
+        return;
+      }
+
+      if (isAnonymous) {
+        alert("Complaint Submitted ✅ (Posted Anonymously - Demo only)");
+      } else {
+        alert("Complaint Submitted ✅ (Demo only)");
+      }
     }
   </script>
 
