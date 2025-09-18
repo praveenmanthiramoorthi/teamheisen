@@ -149,6 +149,7 @@
       font-size: 1.6rem;
       margin-bottom: 3px;
     }
+    
     /* Circular "Add" emphasized */
     .nav-item.add {
   position: absolute;        /* float above navigation */
@@ -218,7 +219,6 @@
   flex-direction: column;
   min-width: 220px;
 }
-
 .dropdown-item {
   font-size: 1.1rem;
   color: var(--green-700, #19744a);
@@ -229,8 +229,7 @@
   transition: color 0.2s;
 }
 
-.dropdown-item:hover,
-.dropdown-item:focus {
+.dropdown-item:hover{
   color: var(--bg-orange, #ff9800);
   outline: none;
 }
@@ -268,6 +267,27 @@ header, .cards-container, .bottom-nav {
   position: fixed;
   z-index: 1;
 }
+.admin-id {
+  font-size: 1rem;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--bg-orange) 45%, var(--bg-green) 100%);
+  border-radius: 15px;
+  padding: 5px 16px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(32,68,94,0.04), 0 0 0 3px rgba(76,175,80,0.15);
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.3s, transform 0.2s;
+  border: none;          /* remove default button border */
+  cursor: pointer;       /* make it clear it’s clickable */
+  font-family: inherit;  /* keep consistent font */
+}
+
+.admin-id:hover {
+  background: linear-gradient(135deg, var(--bg-green) 45%, var(--bg-orange) 100%);
+  transform: scale(1.05);
+  text-decoration: none;
+}
 
   </style>
 </head>
@@ -275,14 +295,15 @@ header, .cards-container, .bottom-nav {
  
 
   <header>
-     <!-- 🔥 Moving background overlay -->
-<div class="background-overlay"></div>
-    <div class="welcome-container">
-      <h1>Welcome To Civic Reporting System</h1>
-      <p>Report, rate, and improve civic services with ease</p>
-    </div>
-    <div class="user-id">User: citizen123</div>
-  </header>
+  <!-- 🔥 Moving background overlay -->
+  <div class="background-overlay"></div>
+  <div class="welcome-container">
+    <h1>Welcome To Civic Reporting System</h1>
+    <p>Report, rate, and improve civic services with ease</p>
+  </div>
+  <button class="admin-id" onclick="window.location.href='profile.html'">User: citizen123</button>
+</header>
+
   <section class="cards-container" aria-label="Main actions">
     <a class="action-card" href="post-complaint.html" aria-label="Post a Complaint">
       <div class="card-icon" aria-hidden="true">📝</div>
