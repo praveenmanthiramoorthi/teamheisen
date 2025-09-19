@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration - Civic Issue Reporter</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9800, #4caf50); /* orange to green */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .register-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 380px;   /* unified wider width */
+  text-align: center;
+}
+
+
+    .register-container h2 {
+      margin-bottom: 20px;
+      color: #1b5e20;
+    }
+
+    .register-container input,
+.register-container select {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;   /* consistent spacing */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+
+.register-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;   /* align with inputs */
+  background: #1b5e20;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+
+    .register-container button:hover {
+      background: #388e3c;
+    }
+
+    .register-container a {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #1b5e20;
+      text-decoration: none;
+    }
+
+    .register-container a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+    #otpSection {
+  margin-top: 12px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>User Registration</h2>
+
+    <!-- Full Name -->
+    <input type="text" id="fullname" placeholder="Enter Full Name">
+
+    <!-- Mobile Number -->
+    <input type="tel" id="mobile" placeholder="Enter Mobile Number" maxlength="10">
+    <button id="getOtpBtn" onclick="getOTP()">Get OTP</button>
+
+    <!-- OTP Input (Hidden initially) -->
+    <div id="otpSection" class="hidden">
+      <input type="text" id="otp" placeholder="Enter OTP" maxlength="6">
+      <button onclick="register()">Register</button>
+      <a href="#" onclick="resendOTP()">Resend OTP</a>
+    </div>
+
+    <a href="login.html">Already have an account? Login</a>
+  </div>
+
+  <script>
+    function getOTP() {
+      const mobile = document.getElementById("mobile").value;
+      const fullname = document.getElementById("fullname").value;
+
+      if (fullname.trim() === "") {
+        alert("Please enter your full name.");
+        return;
+      }
+      if (mobile.length !== 10) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+
+      document.getElementById("getOtpBtn").classList.add("hidden");
+      document.getElementById("otpSection").classList.remove("hidden");
+      alert("OTP sent to +91 " + mobile + " (demo only).");
+    }
+
+    function register() {
+      const otp = document.getElementById("otp").value;
+      if (otp.length === 6) {
+        alert("Registration Successful ✅ (Demo only)");
+      } else {
+        alert("Invalid OTP ❌");
+      }
+    }
+
+    function resendOTP() {
+      alert("New OTP sent (demo only).");
+    }
+  </script>
+</body>
+</html>
